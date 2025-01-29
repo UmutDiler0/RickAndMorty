@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.rickandmorty.R
@@ -21,31 +22,28 @@ import com.example.rickandmorty.R
 @Composable
 fun CustomAppBar(
     title: String = "Rick and Morty"
-){
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        TopAppBar(
-            title = {
-                Text(
-                    text = title
-                )
-            },
-            modifier = Modifier.background(color = Color.Transparent)
-                .weight(1f),
+) {
+    TopAppBar(
+        title = {
+            Text(
+                text = title
+            )
+        },
+        modifier = Modifier.background(color = Color.Transparent),
+        actions = {
+            IconButton(
+                onClick = {}
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_settings),
+                    contentDescription = "",
 
-            )
-        IconButton(
-            onClick = {}
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_settings),
-                contentDescription = ""
-            )
+                )
+            }
         }
-    }
+
+    )
+
 
 }
 
@@ -53,6 +51,6 @@ fun CustomAppBar(
 @Preview(
     showBackground = true
 )
-fun ShowAppBar(){
+fun ShowAppBar() {
     CustomAppBar()
 }
