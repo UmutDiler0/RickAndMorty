@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.rickandmorty.ui.screens.characters.CharacterScreen
+import com.example.rickandmorty.ui.screens.details.DetailScreen
 import com.example.rickandmorty.ui.theme.RickAndMortyTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,7 +24,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             RickAndMortyTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    CharacterScreen(modifier = Modifier.padding(innerPadding))
+                    DetailScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
