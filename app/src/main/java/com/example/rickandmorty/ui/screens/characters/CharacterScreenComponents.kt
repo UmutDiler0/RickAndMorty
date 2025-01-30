@@ -2,7 +2,9 @@ package com.example.rickandmorty.ui.screens.characters
 
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 
 import androidx.compose.foundation.layout.Row
@@ -11,8 +13,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 
@@ -27,13 +33,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import com.example.rickandmorty.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,6 +50,7 @@ import com.example.rickandmorty.R
 fun SearchBarComponent(
 ){
     var query by remember {mutableStateOf("")}
+    val context = LocalContext.current
     OutlinedTextField(
         value = query,
         onValueChange = { newText ->
@@ -54,7 +64,8 @@ fun SearchBarComponent(
         leadingIcon = {
             Icon(
                 painter = painterResource(R.drawable.ic_search),
-                contentDescription = ""
+                contentDescription = "",
+                tint = Color(ContextCompat.getColor(context,R.color.iconColor))
             )
         },
         modifier = Modifier.fillMaxWidth()
@@ -69,13 +80,32 @@ fun SearchBarComponent(
 }
 
 @Composable
+fun ItemListing(
+
+){
+    LazyColumn(
+
+    ) {
+        items(10){
+            CardItem()
+        }
+    }
+}
+
+@Composable
 fun CardItem(
 
 ){
+    val context = LocalContext.current
     Card(
         modifier = Modifier.fillMaxWidth()
-            .padding(16.dp)
+            .padding(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color(ContextCompat.getColor(context,R.color.cardColor)
+            )
+        )
     ) {
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
@@ -95,7 +125,7 @@ fun CardItem(
                     text = "Rick Sanchez",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Medium,
-                    modifier = Modifier.padding(vertical = 8.dp)
+                    modifier = Modifier.padding(vertical = 8.dp),
                 )
                 Text(
                     text = "Köken",
@@ -121,9 +151,10 @@ fun CardItem(
             Icon(
                 painter = painterResource(R.drawable.ic_bookmark_border),
                 contentDescription = "",
-                modifier = Modifier.padding(16.dp)
-
+                modifier = Modifier.padding(16.dp),
+                tint = Color(ContextCompat.getColor(context,R.color.iconColor))
             )
+
         }
     }
 }

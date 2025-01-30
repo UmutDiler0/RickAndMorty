@@ -17,6 +17,7 @@ fun CharacterScreen(
     ){
         CustomAppBar()
         SearchBarComponent()
+        ItemListing()
     }
 
 }
