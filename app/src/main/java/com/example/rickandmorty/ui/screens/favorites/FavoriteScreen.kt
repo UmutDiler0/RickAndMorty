@@ -15,7 +15,6 @@ fun FavoriteScreen(
     Column(
         Modifier.fillMaxSize()
     ) {
-        CustomAppBar(title = "Favorilerim")
         ItemListing()
     }
 }

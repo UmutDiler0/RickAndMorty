@@ -15,7 +15,6 @@ fun CharacterScreen(
     Column (
         modifier = Modifier.fillMaxSize()
     ){
-        CustomAppBar()
         SearchBarComponent()
         ItemListing()
     }
