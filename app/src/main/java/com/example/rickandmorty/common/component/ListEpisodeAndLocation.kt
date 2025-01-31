@@ -26,14 +26,7 @@ fun ListOfEpisodeAndLocations(
 
 @Composable
 fun BgScreen(){
-    Image(
-        painter = painterResource(R.drawable.bgimage),
-        contentDescription = "",
-        contentScale = ContentScale.Crop,
-        modifier = Modifier.fillMaxWidth()
-            .zIndex(-1f),
 
-    )
 }
 
 @Composable

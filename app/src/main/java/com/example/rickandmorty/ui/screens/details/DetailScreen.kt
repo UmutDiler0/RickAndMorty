@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -49,49 +50,33 @@ fun DetailScreen(
     modifier: Modifier = Modifier
 ) {
 
-    Box(
-        contentAlignment = Alignment.BottomCenter,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Box(
+
+        Column(
             modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             DetailImage()
-            CustomAppBar(isVisible = false)
+            CharInfoBoard()
         }
-        CharInfoBoard()
-    }
+
+
+
 
 }
 
 @Composable
 fun DetailImage() {
-    Box(
-        modifier = Modifier.background(color = Color.Transparent),
-        contentAlignment = Alignment.Center
-    ) {
-        Image(
-            painter = painterResource(R.drawable.bgimage),
-            contentDescription = "",
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(400.dp),
-            contentScale = ContentScale.Crop
-        )
-        CharacterImage()
-    }
-}
 
-@Composable
-fun CharacterImage() {
-    val context = LocalContext.current
     Image(
         painter = painterResource(R.drawable.ic_search),
         contentDescription = "",
         modifier = Modifier
             .size(100.dp)
             .clip(shape = CircleShape)
+
     )
+
 }
 
 @Composable
@@ -105,7 +90,8 @@ fun CharInfoBoard() {
         )
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Bottom
         ) {
@@ -113,28 +99,29 @@ fun CharInfoBoard() {
                 text = "Dummy",
                 fontSize = 18.sp,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(top = 12.dp)
+                modifier = Modifier
+                    .padding(top = 12.dp)
                     .fillMaxWidth()
             )
             TagsList()
             EpisodeList()
-            Spacer(modifier = Modifier.padding(bottom = 45.dp))
         }
     }
 }
 
 @Composable
-fun TagsList(){
+fun TagsList() {
     LazyRow(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
             .padding(horizontal = 32.dp),
         contentPadding = PaddingValues(8.dp),
         horizontalArrangement = Arrangement.Center
     ) {
-        items(2){
+        items(2) {
             Column(
                 modifier = Modifier.padding(8.dp)
-            ){
+            ) {
                 Tags()
                 Tags()
             }
@@ -144,16 +131,17 @@ fun TagsList(){
 }
 
 @Composable
-fun Tags(){
+fun Tags() {
     val context = LocalContext.current
     Box(
         modifier = Modifier.clip(shape = RoundedCornerShape(16.dp))
-    ){
+    ) {
         Text(
             text = "Yaşıyor",
-            modifier = Modifier.background(
-                color = Color(ContextCompat.getColor(context,R.color.cardColor))
-            )
+            modifier = Modifier
+                .background(
+                    color = Color(ContextCompat.getColor(context, R.color.cardColor))
+                )
                 .padding(16.dp),
             fontSize = 16.sp
         )
@@ -164,8 +152,8 @@ fun Tags(){
 
 @Composable
 fun EpisodeList(
-    episodeCount : Int = 45
-){
+    episodeCount: Int = 45
+) {
     Column {
         Text(
             text = "Bölümler (${episodeCount})",
@@ -174,9 +162,10 @@ fun EpisodeList(
         LazyColumn(
             modifier = Modifier.height(300.dp)
         ) {
-            items(10){
+            items(10) {
                 Row(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -202,7 +191,8 @@ fun EpisodeList(
                 }
                 Divider(
                     thickness = 1.dp,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(horizontal = 16.dp)
                 )
 
@@ -213,7 +203,8 @@ fun EpisodeList(
 
 @Composable
 @Preview(
-    showBackground = true
+    showBackground = true,
+    showSystemUi = true
 )
 fun ShowUi() {
     DetailScreen()
