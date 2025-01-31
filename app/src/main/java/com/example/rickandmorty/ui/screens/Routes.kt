@@ -5,5 +5,7 @@ enum class Routes {
     DETAILS,
     EPISODES,
     FAVORITES,
-    LOCATIONS
+    LOCATIONS,
+    EPISODE,
+    LOCATION
 }

@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -38,17 +39,26 @@ fun CustomAppBar(
         colors =  TopAppBarDefaults.topAppBarColors(
             containerColor = Color.Transparent
         ),
+        navigationIcon ={
+            if (isVisible){
+                Icon(
+                    painter = painterResource(R.drawable.ic_arrowback),
+                    contentDescription = "",
+                    tint = Color(ContextCompat.getColor(context,R.color.iconColor))
+                )
+            }
+        },
         actions = {
             IconButton(
                 onClick = {}
             ) {
-                if(isVisible){
+
                     Icon(
                         painter = painterResource(R.drawable.ic_settings),
                         contentDescription = "",
                         tint = Color(ContextCompat.getColor(context,R.color.iconColor))
                     )
-                }
+
             }
         }
 
