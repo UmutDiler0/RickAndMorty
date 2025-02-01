@@ -51,7 +51,7 @@ fun ListOfEpisodeAndLocations(
 fun ListsView(){
     Card(
         modifier = Modifier.fillMaxWidth()
-            .clip(shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)),
+            .clip(shape = RoundedCornerShape(topStart = 62.dp, topEnd = 62.dp)),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),

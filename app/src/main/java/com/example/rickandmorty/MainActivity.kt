@@ -24,6 +24,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.zIndex
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -46,16 +49,26 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        WindowInsetsControllerCompat(window, window.decorView).apply {
+            hide(WindowInsetsCompat.Type.statusBars()) // Durum çubuğunu gizle
+            systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        }
         setContent {
             val currentScreen = remember { mutableStateOf(Routes.CHARACTERS.name) }
             val isTopBarVisible = remember { mutableStateOf(true) }
             RickAndMortyTheme {
                 val navController = rememberNavController()
+                isTopBarVisible.value = when (currentScreen.value) {
+                    Routes.EPISODES.name -> false
+                    Routes.LOCATIONS.name -> false
+                    else -> true
+                }
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     bottomBar = { BottomNav(navController) },
                     topBar = {
-                        if (isTopBarVisible.value) {
+                        if(isTopBarVisible.value){
                             CustomAppBar(
                                 title = when (currentScreen.value) {
                                     Routes.CHARACTERS.name -> "Rick and Morty"
@@ -66,11 +79,6 @@ class MainActivity : ComponentActivity() {
                                     else -> ""
                                 },
                                 isVisible = when (currentScreen.value) {
-                                    Routes.CHARACTERS.name -> false
-                                    Routes.DETAILS.name -> false
-                                    Routes.FAVORITES.name -> false
-                                    Routes.EPISODES.name -> false
-                                    Routes.LOCATIONS.name -> false
                                     Routes.EPISODE.name -> true
                                     Routes.LOCATION.name -> true
                                     else -> false
@@ -80,14 +88,14 @@ class MainActivity : ComponentActivity() {
                     },
                     containerColor = Color.Transparent
                 ) { innerPadding ->
-                    Box(
+                    Column(
                         modifier = Modifier
-                            .padding(innerPadding)
-                            .fillMaxSize(),
+                            .fillMaxSize()
+                            .padding(innerPadding),
                     ) {
                         NavHost(
                             navController = navController,
-                            startDestination = Routes.CHARACTERS.name
+                            startDestination = Routes.CHARACTERS.name,
                         ) {
                             composable(route = Routes.CHARACTERS.name) {
                                 LaunchedEffect(Unit) {
