@@ -62,6 +62,9 @@ class MainActivity : ComponentActivity() {
                 isTopBarVisible.value = when (currentScreen.value) {
                     Routes.EPISODES.name -> false
                     Routes.LOCATIONS.name -> false
+                    Routes.DETAILS.name -> false
+                    Routes.EPISODE.name -> false
+                    Routes.LOCATION.name -> false
                     else -> true
                 }
                 Scaffold(
@@ -79,10 +82,12 @@ class MainActivity : ComponentActivity() {
                                     else -> ""
                                 },
                                 isVisible = when (currentScreen.value) {
-                                    Routes.EPISODE.name -> true
+                                    Routes.EPISODE.name ->true
                                     Routes.LOCATION.name -> true
+                                    Routes.DETAILS.name -> true
                                     else -> false
-                                }
+                                },
+                                navController = navController
                             )
                         }
                     },
@@ -101,31 +106,31 @@ class MainActivity : ComponentActivity() {
                                 LaunchedEffect(Unit) {
                                     currentScreen.value = Routes.CHARACTERS.name
                                 }
-                                CharacterScreen()
+                                CharacterScreen(navController = navController)
                             }
                             composable(route = Routes.FAVORITES.name) {
                                 LaunchedEffect(Unit) { currentScreen.value = Routes.FAVORITES.name }
-                                FavoriteScreen()
+                                FavoriteScreen(navController = navController)
                             }
                             composable(route = Routes.LOCATIONS.name) {
                                 LaunchedEffect(Unit) { currentScreen.value = Routes.LOCATIONS.name }
-                                LocationScreen()
+                                LocationScreen(navController = navController)
                             }
                             composable(route = Routes.EPISODES.name) {
                                 LaunchedEffect(Unit) { currentScreen.value = Routes.EPISODES.name }
-                                EpisodeScreen()
+                                EpisodeScreen(navController = navController)
                             }
                             composable(route = Routes.DETAILS.name) {
                                 LaunchedEffect(Unit) { currentScreen.value = Routes.DETAILS.name }
-                                DetailScreen()
+                                DetailScreen(navController = navController)
                             }
                             composable(route = Routes.EPISODE.name) {
                                 LaunchedEffect(Unit) { currentScreen.value = Routes.EPISODE.name }
-                                CurrentEpisode()
+                                CurrentEpisode(navController)
                             }
                             composable(route = Routes.LOCATION.name) {
                                 LaunchedEffect(Unit) { currentScreen.value = Routes.LOCATION.name }
-                                CurrentLocation()
+                                CurrentLocation(navController)
                             }
                         }
                     }

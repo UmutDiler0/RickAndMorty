@@ -3,10 +3,10 @@ package com.example.rickandmorty.ui.screens.characters
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,7 +21,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -43,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavController
 import com.example.rickandmorty.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -81,25 +81,33 @@ fun SearchBarComponent(
 
 @Composable
 fun ItemListing(
-
+    navController: NavController,
+    route: String
 ){
     LazyColumn(
 
     ) {
         items(10){
-            CardItem()
+            CardItem(
+                navController = navController,
+                route = route
+            )
         }
     }
 }
 
 @Composable
 fun CardItem(
-
+    navController: NavController,
+    route: String
 ){
     val context = LocalContext.current
     Card(
         modifier = Modifier.fillMaxWidth()
-            .padding(16.dp),
+            .padding(16.dp)
+            .clickable {
+                navController.navigate(route)
+            },
         colors = CardDefaults.cardColors(
             containerColor = Color(ContextCompat.getColor(context,R.color.cardColor)
             )
@@ -165,5 +173,5 @@ fun CardItem(
     showBackground = true
 )
 fun ShowComponents(){
-    CardItem()
+
 }

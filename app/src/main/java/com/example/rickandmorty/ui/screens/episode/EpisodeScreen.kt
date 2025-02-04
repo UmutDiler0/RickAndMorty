@@ -18,11 +18,18 @@ import androidx.compose.ui.res.painterResource
 
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.zIndex
+import androidx.navigation.NavController
+import androidx.navigation.NavHost
+import androidx.navigation.NavHostController
 import com.example.rickandmorty.R
 import com.example.rickandmorty.common.component.CustomAppBar
 import com.example.rickandmorty.common.component.ListOfEpisodeAndLocations
+import com.example.rickandmorty.ui.screens.Routes
+
 @Composable
-fun EpisodeScreen() {
+fun EpisodeScreen(
+    navController: NavHostController
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -40,12 +47,16 @@ fun EpisodeScreen() {
 
         // Üst AppBar
         CustomAppBar(
-            title = "Bölümler"
+            title = "Bölümler",
+            navController = navController
         )
     }
 
     // Liste
-    ListOfEpisodeAndLocations()
+    ListOfEpisodeAndLocations(
+        navController = navController,
+        route = Routes.EPISODE.name
+    )
 }
 
 @Preview(
@@ -53,5 +64,5 @@ fun EpisodeScreen() {
 )
 @Composable
 fun ShowUi(){
-    EpisodeScreen()
+//    EpisodeScreen()
 }

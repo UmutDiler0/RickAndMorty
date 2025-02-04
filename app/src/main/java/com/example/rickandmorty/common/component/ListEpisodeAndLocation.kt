@@ -1,6 +1,7 @@
 package com.example.rickandmorty.common.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -30,17 +31,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.navigation.NavHostController
 import com.example.rickandmorty.R
 
 @Composable
 fun ListOfEpisodeAndLocations(
-
+    navController: NavHostController,
+    route: String
 ){
     Column(
         modifier = Modifier.fillMaxSize()
     ){
         Spacer(modifier = Modifier.padding(top = 150.dp))
-        ListsView()
+        ListsView(navController,route)
     }
 
 }
@@ -48,7 +51,10 @@ fun ListOfEpisodeAndLocations(
 
 
 @Composable
-fun ListsView(){
+fun ListsView(
+    navController: NavHostController,
+    route: String
+){
     Card(
         modifier = Modifier.fillMaxWidth()
             .clip(shape = RoundedCornerShape(topStart = 62.dp, topEnd = 62.dp)),
@@ -62,7 +68,10 @@ fun ListsView(){
         ) {
             items(10){
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth()
+                        .clickable {
+                            navController.navigate(route = route)
+                        },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
@@ -107,5 +116,5 @@ fun ListsView(){
     showSystemUi = true
 )
 fun ShowUi(){
-    ListOfEpisodeAndLocations()
+//    ListOfEpisodeAndLocations()
 }

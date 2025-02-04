@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -20,7 +21,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavHostController
 import com.example.rickandmorty.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -28,6 +31,7 @@ import com.example.rickandmorty.R
 fun CustomAppBar(
     title: String = "Rick and Morty",
     isVisible: Boolean = true,
+    navController: NavHostController
 ) {
     val context = LocalContext.current
     TopAppBar(
@@ -41,16 +45,27 @@ fun CustomAppBar(
         ),
         navigationIcon ={
             if (isVisible){
-                Icon(
-                    painter = painterResource(R.drawable.ic_arrowback),
-                    contentDescription = "",
-                    tint = Color(ContextCompat.getColor(context,R.color.iconColor))
-                )
+                IconButton (
+                    onClick = {
+                        navController.navigateUp()
+                    }
+                ){
+                    Icon(
+                        painter = painterResource(R.drawable.ic_arrowback),
+                        contentDescription = "",
+                        tint = Color(ContextCompat.getColor(context,R.color.iconColor))
+                    )
+                }
+
+
             }
         },
         actions = {
             IconButton(
-                onClick = {}
+                onClick = {
+
+                },
+                modifier = Modifier.padding(start = 8.dp)
             ) {
 
                     Icon(
@@ -72,5 +87,5 @@ fun CustomAppBar(
     showBackground = true
 )
 fun ShowAppBar() {
-    CustomAppBar()
+//    CustomAppBar()
 }
