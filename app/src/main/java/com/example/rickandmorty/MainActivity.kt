@@ -27,6 +27,7 @@ import androidx.compose.ui.zIndex
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -35,6 +36,7 @@ import com.example.rickandmorty.common.component.BottomNav
 import com.example.rickandmorty.common.component.CustomAppBar
 import com.example.rickandmorty.ui.screens.Routes
 import com.example.rickandmorty.ui.screens.characters.CharacterScreen
+import com.example.rickandmorty.ui.screens.characters.CharacterViewModel
 import com.example.rickandmorty.ui.screens.currentepisode.CurrentEpisode
 import com.example.rickandmorty.ui.screens.currentlocation.CurrentLocation
 import com.example.rickandmorty.ui.screens.details.DetailScreen
@@ -57,6 +59,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val currentScreen = remember { mutableStateOf(Routes.CHARACTERS.name) }
             val isTopBarVisible = remember { mutableStateOf(true) }
+            val viewModel: CharacterViewModel = hiltViewModel()
             RickAndMortyTheme {
                 val navController = rememberNavController()
                 isTopBarVisible.value = when (currentScreen.value) {
@@ -105,15 +108,19 @@ class MainActivity : ComponentActivity() {
                             composable(route = Routes.CHARACTERS.name) {
                                 LaunchedEffect(Unit) {
                                     currentScreen.value = Routes.CHARACTERS.name
+                                    viewModel.characterList()
                                 }
-                                CharacterScreen(navController = navController)
+                                CharacterScreen(navController = navController,viewModel = viewModel)
                             }
                             composable(route = Routes.FAVORITES.name) {
                                 LaunchedEffect(Unit) { currentScreen.value = Routes.FAVORITES.name }
                                 FavoriteScreen(navController = navController)
                             }
                             composable(route = Routes.LOCATIONS.name) {
-                                LaunchedEffect(Unit) { currentScreen.value = Routes.LOCATIONS.name }
+                                LaunchedEffect(Unit) {
+                                    currentScreen.value = Routes.LOCATIONS.name
+
+                                }
                                 LocationScreen(navController = navController)
                             }
                             composable(route = Routes.EPISODES.name) {

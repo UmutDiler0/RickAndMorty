@@ -19,7 +19,8 @@ fun FavoriteScreen(
     ) {
         ItemListing(
             navController = navController,
-            route = Routes.DETAILS.name
+            route = Routes.DETAILS.name,
+            listOfCharacters = mutableListOf()
         )
     }
 }

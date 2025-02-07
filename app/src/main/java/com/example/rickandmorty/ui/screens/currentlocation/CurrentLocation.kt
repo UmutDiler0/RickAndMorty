@@ -24,7 +24,8 @@ fun CurrentLocation(
         )
         ItemListing(
             navController = navController,
-            route = Routes.LOCATION.name
+            route = Routes.LOCATION.name,
+            listOfCharacters = mutableListOf()
         )
     }
 }

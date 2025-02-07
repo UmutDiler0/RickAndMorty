@@ -25,7 +25,8 @@ fun CurrentEpisode(
         )
         ItemListing(
             navController = navController,
-            route = Routes.EPISODE.name
+            route = Routes.EPISODE.name,
+            listOfCharacters = mutableListOf()
         )
     }
 
