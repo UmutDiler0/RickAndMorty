@@ -26,7 +26,7 @@ fun CharacterScreen(
 ){
     val isResponse by viewModel.isResponse.collectAsState()
     val listOfCharacter by viewModel.listOfCharacters.collectAsState()
-    LaunchedEffect(isResponse) { }
+
     Column (
         modifier = Modifier.fillMaxSize()
     ){

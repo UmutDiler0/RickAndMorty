@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -33,17 +34,23 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import com.example.rickandmorty.R
+import com.example.rickandmorty.data.models.LocationResponse
 
 @Composable
 fun ListOfEpisodeAndLocations(
     navController: NavHostController,
-    route: String
+    route: String,
+    locations: MutableList<LocationResponse>
 ){
     Column(
         modifier = Modifier.fillMaxSize()
     ){
         Spacer(modifier = Modifier.padding(top = 150.dp))
-        ListsView(navController,route)
+        ListsView(
+            navController = navController,
+            route = route,
+            locations = locations
+        )
     }
 
 }
@@ -53,7 +60,8 @@ fun ListOfEpisodeAndLocations(
 @Composable
 fun ListsView(
     navController: NavHostController,
-    route: String
+    route: String,
+    locations: MutableList<LocationResponse>
 ){
     Card(
         modifier = Modifier.fillMaxWidth()
@@ -66,7 +74,7 @@ fun ListsView(
             Modifier.fillMaxSize()
                 .weight(1f),
         ) {
-            items(10){
+            items(locations){ location ->
                 Row(
                     modifier = Modifier.fillMaxWidth()
                         .clickable {
@@ -82,17 +90,17 @@ fun ListsView(
                     )
                     Column {
                         Text(
-                            text = "Earth (C-137)",
+                            text = location.name,
                             fontSize = 18.sp,
                             modifier = Modifier.padding(8.dp)
                         )
                         Text(
-                            text = "Tür: Planet",
+                            text = "Tür:" + location.type,
                             modifier = Modifier.padding(start = 8.dp),
                             fontWeight = FontWeight.Light
                         )
                         Text(
-                            text = "Kişi Sayısı: 27",
+                            text = "Kişi Sayısı: ${location.residents.size}",
                             modifier = Modifier.padding(start = 8.dp),
                             fontWeight = FontWeight.Light
                         )

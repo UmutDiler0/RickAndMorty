@@ -55,7 +55,8 @@ fun EpisodeScreen(
     // Liste
     ListOfEpisodeAndLocations(
         navController = navController,
-        route = Routes.EPISODE.name
+        route = Routes.EPISODE.name,
+        mutableListOf()
     )
 }
 
