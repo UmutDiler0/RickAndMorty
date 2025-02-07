@@ -27,15 +27,13 @@ class CharacterViewModel @Inject constructor(
                 _listOfCharacters.update {
                     mainRepo.getCharacters()
                 }
-
-            }
-            launch {
                 _isResponse.update {
                     if (_listOfCharacters.value.isEmpty())
                         false
                     else
                         true
                 }
+
             }
 
         }

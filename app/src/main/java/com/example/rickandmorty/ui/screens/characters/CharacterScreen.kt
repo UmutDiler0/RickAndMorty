@@ -5,8 +5,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -22,21 +26,19 @@ fun CharacterScreen(
 ){
     val isResponse by viewModel.isResponse.collectAsState()
     val listOfCharacter by viewModel.listOfCharacters.collectAsState()
+    LaunchedEffect(isResponse) { }
     Column (
         modifier = Modifier.fillMaxSize()
     ){
-        when(isResponse)
-        {
-            false -> LoadingDatas()
-            else -> {
-                SearchBarComponent()
-                ItemListing(
-                    navController = navController,
-                    route = Routes.DETAILS.name,
-                    listOfCharacters = listOfCharacter
-                )
-            }
-        }
+        if(isResponse){
+            SearchBarComponent()
+            ItemListing(
+                navController = navController,
+                route = Routes.DETAILS.name,
+                listOfCharacters = listOfCharacter
+            )
+        }else
+            LoadingDatas()
 
     }
 
