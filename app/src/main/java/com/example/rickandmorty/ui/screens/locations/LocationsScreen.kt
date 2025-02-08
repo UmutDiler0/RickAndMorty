@@ -10,19 +10,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.rickandmorty.R
 import com.example.rickandmorty.common.component.CustomAppBar
-import com.example.rickandmorty.common.component.ListOfEpisodeAndLocations
 import com.example.rickandmorty.ui.screens.Routes
 import com.example.rickandmorty.ui.screens.characters.LoadingDatas
 
 @Composable
 fun LocationScreen(
     navController: NavHostController
-){
+) {
     val viewModel: LocationsViewModel = hiltViewModel()
     LaunchedEffect(Unit) {
         viewModel.getLocations()
@@ -31,7 +29,7 @@ fun LocationScreen(
     val isResponse by viewModel.isResponse.collectAsState()
     Box(
         modifier = Modifier
-    ){
+    ) {
         Image(
             painter = painterResource(R.drawable.bgimage),
             contentScale = ContentScale.Crop,
@@ -43,15 +41,13 @@ fun LocationScreen(
             navController = navController
         )
     }
-    when(isResponse){
-        true ->{
-            ListOfEpisodeAndLocations(
-                navController = navController,
-                route = Routes.LOCATION.name,
-                listOfLocations
-            )
-        }
-        false -> LoadingDatas()
-    }
+
+    ListOfLocations(
+        navController = navController,
+        route = Routes.LOCATION.name,
+        listOfLocations,
+        isResponse = isResponse
+    )
+
 
 }

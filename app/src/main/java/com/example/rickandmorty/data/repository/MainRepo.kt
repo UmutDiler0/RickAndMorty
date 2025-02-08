@@ -39,4 +39,17 @@ class MainRepo @Inject constructor(
         }
     }
 
+    suspend fun getEpisodes(): MutableList<EpisodeResponse>{
+        return try{
+            val response = rickAndMortyApi.getEpisode().results
+            if(response.isEmpty()){
+                mutableListOf()
+            }else{
+                response.toMutableList()
+            }
+        }catch(e: Exception){
+            mutableListOf()
+        }
+    }
+
 }
