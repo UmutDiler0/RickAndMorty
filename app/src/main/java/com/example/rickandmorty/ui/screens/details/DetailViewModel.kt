@@ -25,10 +25,27 @@ class DetailViewModel @Inject constructor(
     private var _isResponse = MutableStateFlow<Boolean>(false)
     val isResponse : StateFlow<Boolean> get() = _isResponse
 
+    private var _episodeList = MutableStateFlow<MutableList<EpisodeResponse>>(mutableListOf())
+    val episodeList : StateFlow<MutableList<EpisodeResponse>> get() = _episodeList
+
     fun getCharInfo(id: Int){
         viewModelScope.launch {
             _characterInfo.update {
-                mainRepo.getCharacterById(id)
+                val character = mainRepo.getCharacterById(id)
+                it.copy(
+                    id = character.id,
+                    name = character.name,
+                    status = character.status,
+                    species = character.species,
+                    type = character.type,
+                    gender = character.gender,
+                    origin = character.origin,
+                    location = character.location,
+                    image = character.image,
+                    episode = character.episode,
+                    url = character.url,
+                    created = character.created
+                )
             }
             _isResponse.update {
                 if(_characterInfo.value == CharacterResponse.empty())
@@ -42,15 +59,21 @@ class DetailViewModel @Inject constructor(
     fun getEpisodeInfo(url : String){
         viewModelScope.launch {
             _episodeInfo.update {
+                val episode = mainRepo.getEpisodesByUrl(url)
                 it.copy(
-                    id = mainRepo.getEpisodesByUrl(url).id,
-                    name = mainRepo.getEpisodesByUrl(url).name,
-                    episode = mainRepo.getEpisodesByUrl(url).episode,
-                    url = mainRepo.getEpisodesByUrl(url).url,
-                    characters = mainRepo.getEpisodesByUrl(url).characters,
-                    air_date = mainRepo.getEpisodesByUrl(url).air_date,
-                    created = mainRepo.getEpisodesByUrl(url).created,
+                    id = episode.id,
+                    name = episode.name,
+                    episode = episode.episode,
+                    url = episode.url,
+                    characters = episode.characters,
+                    air_date = episode.air_date,
+                    created = episode.created,
                 )
+                _episodeList.update {
+                    it.add(episode)
+                    it
+                }
+                it
             }
         }
     }

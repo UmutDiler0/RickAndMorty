@@ -2,6 +2,7 @@ package com.example.rickandmorty.ui.screens.details
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -54,6 +55,7 @@ import coil.transform.CircleCropTransformation
 import com.example.rickandmorty.R
 import com.example.rickandmorty.common.component.CustomAppBar
 import com.example.rickandmorty.data.models.CharacterResponse
+import com.example.rickandmorty.ui.screens.Routes
 import com.example.rickandmorty.ui.screens.characters.LoadingDatas
 
 @Composable
@@ -81,7 +83,8 @@ fun DetailScreen(
                 .offset(y = (-20).dp),
             character = charInfo,
             viewModel= viewModel,
-            isResponse = isResponse
+            isResponse = isResponse,
+            navController = navController
         )
     }
 
@@ -124,7 +127,8 @@ fun CharInfoBoard(
     modifier: Modifier,
     character: CharacterResponse,
     viewModel: DetailViewModel,
-    isResponse: Boolean
+    isResponse: Boolean,
+    navController: NavHostController
 ) {
     Card(
         modifier = modifier
@@ -154,7 +158,7 @@ fun CharInfoBoard(
                     TagsList(
                         character
                     )
-                    EpisodeList(character,viewModel)
+                    EpisodeList(character,viewModel,navController)
                 }
             }
         }
@@ -175,7 +179,7 @@ fun TagsList(
         Column(
             modifier = Modifier.padding(8.dp)
         ) {
-            Tags(character.type)
+            Tags(character.location.name)
             Tags(character.gender)
         }
         Column(
@@ -214,11 +218,15 @@ fun Tags(
 @Composable
 fun EpisodeList(
     character: CharacterResponse,
-    viewModel: DetailViewModel
+    viewModel: DetailViewModel,
+    navController: NavHostController
 ) {
-
-    var episodes = listOf<String>()
-    episodes = character.episode
+    var episodes = character.episode
+    episodes.forEach {
+        viewModel.getEpisodeInfo(it)
+    }
+    val episodeList by viewModel.episodeList.collectAsState()
+    episodeList.size
 
     Column {
         Text(
@@ -228,15 +236,15 @@ fun EpisodeList(
         LazyColumn(
             modifier = Modifier.height(300.dp)
         ) {
-            items(episodes) {episode ->
-                val episodeUrl = episode
-                viewModel.getEpisodeInfo(episodeUrl)
-                val episodeInfo by viewModel.episodeInfo.collectAsState()
+            items(episodeList) {episode ->
 
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .padding(horizontal = 16.dp)
+                        .clickable {
+                            navController.navigate(route = Routes.EPISODE.name)
+                        },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
@@ -247,10 +255,10 @@ fun EpisodeList(
                         modifier = Modifier.padding(8.dp),
                     ) {
                         Text(
-                            text = episodeInfo.name
+                            text = episode.name
                         )
                         Text(
-                            text = episodeInfo.episode
+                            text = episode.episode
                         )
                     }
                     Spacer(modifier = Modifier.weight(1f))

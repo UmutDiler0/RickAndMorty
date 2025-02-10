@@ -29,12 +29,4 @@ fun CurrentEpisode(
             listOfCharacters = mutableListOf()
         )
     }
-
-}
-@Preview(
-    showBackground = true
-)
-@Composable
-fun ShowUi(){
-
 }
