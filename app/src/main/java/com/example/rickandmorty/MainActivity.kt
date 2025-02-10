@@ -127,9 +127,10 @@ class MainActivity : ComponentActivity() {
                                 LaunchedEffect(Unit) { currentScreen.value = Routes.EPISODES.name }
                                 EpisodeScreen(navController = navController)
                             }
-                            composable(route = Routes.DETAILS.name) {
+                            composable(route = Routes.DETAILS.name + "/{characterId}") { backStackEntry ->
+                                val characterId = backStackEntry.arguments?.getString("characterId")?.toIntOrNull()
                                 LaunchedEffect(Unit) { currentScreen.value = Routes.DETAILS.name }
-                                DetailScreen(navController = navController)
+                                DetailScreen(navController = navController, characterId = characterId)
                             }
                             composable(route = Routes.EPISODE.name) {
                                 LaunchedEffect(Unit) { currentScreen.value = Routes.EPISODE.name }

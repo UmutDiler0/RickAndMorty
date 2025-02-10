@@ -8,6 +8,7 @@ import com.example.rickandmorty.data.models.LocationResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.Url
 
 interface RickAndMortyApi {
 
@@ -30,5 +31,11 @@ interface RickAndMortyApi {
     suspend fun getEpisode(
         @Query("page") page: Int? = null
     ): ApiResponse<EpisodeResponse>
+
+    @GET
+    suspend fun getEpisodeByCharacter(
+        @Url url: String
+    ): EpisodeResponse
+
 
 }

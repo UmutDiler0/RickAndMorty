@@ -8,4 +8,16 @@ data class EpisodeResponse(
     val characters: List<String>,
     val url: String,
     val created: String
-)
+){
+    companion object {
+        fun empty() = EpisodeResponse(
+            id = 0,
+            name = "",
+            air_date = "",
+            episode = "",
+            characters = emptyList(),
+            url = "",
+            created = ""
+        )
+    }
+}

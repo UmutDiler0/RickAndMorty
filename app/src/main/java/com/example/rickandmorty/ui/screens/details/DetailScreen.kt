@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -24,6 +25,12 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,40 +43,54 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHost
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import coil.size.Size
+import coil.transform.CircleCropTransformation
 import com.example.rickandmorty.R
 import com.example.rickandmorty.common.component.CustomAppBar
+import com.example.rickandmorty.data.models.CharacterResponse
+import com.example.rickandmorty.ui.screens.characters.LoadingDatas
 
 @Composable
 fun DetailScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    characterId: Int?
 ) {
+    val viewModel: DetailViewModel = hiltViewModel()
+    LaunchedEffect(Unit) { viewModel.getCharInfo(characterId!!) }
+    val charInfo by viewModel.characterInfo.collectAsState()
+    val isResponse by viewModel.isResponse.collectAsState()
 
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
 
-        DetailImage() // Arka planda olacak
+        DetailImage(charImage = charInfo.image)
         CustomAppBar(
             navController = navController
         )
         CharInfoBoard(
             modifier = Modifier
-                .align(Alignment.BottomCenter) // Ekranın altında hizala
-                .offset(y = (-20).dp) // 50dp yukarı kaydır
+                .align(Alignment.BottomCenter)
+                .offset(y = (-20).dp),
+            character = charInfo,
+            viewModel= viewModel,
+            isResponse = isResponse
         )
     }
-
-
-
-
 
 }
 
 @Composable
-fun DetailImage() {
+fun DetailImage(
+    charImage: String?
+) {
 
     Box(
         modifier = Modifier,
@@ -81,13 +102,17 @@ fun DetailImage() {
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxWidth()
         )
-        Image(
-            painter = painterResource(R.drawable.ic_search),
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(charImage)
+                .crossfade(true)
+                .size(Size.ORIGINAL)
+                .transformations(CircleCropTransformation())
+                .build(),
             contentDescription = "",
-            modifier = Modifier
-                .size(100.dp)
-                .clip(shape = CircleShape)
-
+            placeholder = painterResource(R.drawable.ic_search),
+            error = painterResource(R.drawable.ic_bookmark_border),
+            modifier = Modifier.size(150.dp)
         )
     }
 
@@ -96,7 +121,10 @@ fun DetailImage() {
 
 @Composable
 fun CharInfoBoard(
-    modifier: Modifier
+    modifier: Modifier,
+    character: CharacterResponse,
+    viewModel: DetailViewModel,
+    isResponse: Boolean
 ) {
     Card(
         modifier = modifier
@@ -106,55 +134,71 @@ fun CharInfoBoard(
             containerColor = Color.White
         )
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Bottom
-        ) {
-            Text(
-                text = "Dummy",
-                fontSize = 18.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .padding(top = 12.dp)
-                    .fillMaxWidth()
-            )
-            TagsList()
-            EpisodeList()
+        when(isResponse){
+            false -> LoadingDatas()
+            else -> {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Bottom
+                ) {
+                    Text(
+                        text = character.name,
+                        fontSize = 18.sp,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .padding(top = 12.dp)
+                            .fillMaxWidth()
+                    )
+                    TagsList(
+                        character
+                    )
+                    EpisodeList(character,viewModel)
+                }
+            }
         }
     }
 }
 
 @Composable
-fun TagsList() {
-    LazyRow(
+fun TagsList(
+    character: CharacterResponse
+
+) {
+    Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 32.dp),
-        contentPadding = PaddingValues(8.dp),
         horizontalArrangement = Arrangement.Center
     ) {
-        items(2) {
-            Column(
-                modifier = Modifier.padding(8.dp)
-            ) {
-                Tags()
-                Tags()
-            }
-
+        Column(
+            modifier = Modifier.padding(8.dp)
+        ) {
+            Tags(character.type)
+            Tags(character.gender)
         }
+        Column(
+            modifier = Modifier.padding(8.dp)
+        ) {
+            Tags(character.species)
+            Tags(character.status)
+        }
+
     }
+
 }
 
 @Composable
-fun Tags() {
+fun Tags(
+    tag: String
+) {
     val context = LocalContext.current
     Box(
         modifier = Modifier.clip(shape = RoundedCornerShape(16.dp))
     ) {
         Text(
-            text = "Yaşıyor",
+            text = tag,
             modifier = Modifier
                 .background(
                     color = Color(ContextCompat.getColor(context, R.color.cardColor))
@@ -169,17 +213,26 @@ fun Tags() {
 
 @Composable
 fun EpisodeList(
-    episodeCount: Int = 45
+    character: CharacterResponse,
+    viewModel: DetailViewModel
 ) {
+
+    var episodes = listOf<String>()
+    episodes = character.episode
+
     Column {
         Text(
-            text = "Bölümler (${episodeCount})",
+            text = "Bölümler (${episodes.size})",
             modifier = Modifier.padding(8.dp)
         )
         LazyColumn(
             modifier = Modifier.height(300.dp)
         ) {
-            items(10) {
+            items(episodes) {episode ->
+                val episodeUrl = episode
+                viewModel.getEpisodeInfo(episodeUrl)
+                val episodeInfo by viewModel.episodeInfo.collectAsState()
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -194,10 +247,10 @@ fun EpisodeList(
                         modifier = Modifier.padding(8.dp),
                     ) {
                         Text(
-                            text = "Bölüm 1 Sezon 2"
+                            text = episodeInfo.name
                         )
                         Text(
-                            text = "Örnek"
+                            text = episodeInfo.episode
                         )
                     }
                     Spacer(modifier = Modifier.weight(1f))
@@ -218,11 +271,3 @@ fun EpisodeList(
     }
 }
 
-@Composable
-@Preview(
-    showBackground = true,
-    showSystemUi = true
-)
-fun ShowUi() {
-//    DetailScreen()
-}

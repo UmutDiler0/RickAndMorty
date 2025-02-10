@@ -119,7 +119,7 @@ fun CardItem(
         modifier = Modifier.fillMaxWidth()
             .padding(16.dp)
             .clickable {
-                navController.navigate(route)
+                navController.navigate(route+"/${character.id}")
             },
         colors = CardDefaults.cardColors(
             containerColor = Color(ContextCompat.getColor(context,R.color.cardColor)
@@ -162,7 +162,7 @@ fun CardItem(
                     modifier = Modifier.padding(top = 8.dp)
                 )
                 Text(
-                    text = character.location.name,
+                    text = character.location!!.name,
                     fontSize = 16.sp,
                 )
                 Text(
