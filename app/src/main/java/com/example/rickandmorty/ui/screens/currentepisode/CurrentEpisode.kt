@@ -23,31 +23,34 @@ import com.example.rickandmorty.ui.screens.characters.LoadingDatas
 fun CurrentEpisode(
     navController: NavHostController,
     episodeId: Int?
-){
+) {
     val viewModel: CurrentEpisodeVM = hiltViewModel()
-    if(episodeId != null)
+
+    episodeId?.let {
         viewModel.getCharacterById(episodeId)
+    }
 
     val episode by viewModel.episodeInfo.collectAsState()
-    episode.characters.forEach {
-        viewModel.getCharByEpisode(it)
-    }
     val charList by viewModel.episodeCharList.collectAsState()
-    val isResponse by viewModel.isResposnse.collectAsState()
-
-
+    val isResponse by viewModel.isResponse.collectAsState()
 
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        CustomAppBar(
-            title = episode.episode,
-            isVisible = true,
-            navController = navController
-        )
-        when(isResponse){
+
+        episode?.episode?.let {
+            CustomAppBar(
+                title = it ?: "Unknown episode",
+                isVisible = true,
+                navController = navController
+            )
+        }
+
+
+        when (isResponse) {
             false -> LoadingDatas()
             else -> {
+
                 ItemListing(
                     navController = navController,
                     route = Routes.DETAILS.name,
@@ -57,3 +60,5 @@ fun CurrentEpisode(
         }
     }
 }
+
+
