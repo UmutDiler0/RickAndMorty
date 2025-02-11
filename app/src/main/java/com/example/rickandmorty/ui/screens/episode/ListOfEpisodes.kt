@@ -16,6 +16,10 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.rickandmorty.R
 import com.example.rickandmorty.data.models.EpisodeResponse
+import com.example.rickandmorty.ui.screens.Routes
 import com.example.rickandmorty.ui.screens.characters.LoadingDatas
 
 @Composable
@@ -74,7 +79,7 @@ fun ListViewForEpisodes(
                     Row(
                         modifier = Modifier.fillMaxWidth()
                             .clickable {
-                                navController.navigate(route = route)
+                                navController.navigate(route = route + "/${episode.id}")
                             },
                         verticalAlignment = Alignment.CenterVertically
                     ) {

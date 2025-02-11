@@ -51,12 +51,10 @@ class CurrentEpisodeVM @Inject constructor(
                 )
             }
 
-            // Listeye karakteri ekle
             _episodeCharList.update { currentList ->
                 currentList.toMutableList().apply { add(character) }
             }
 
-            // Bütün karakterler yüklendikten sonra response güncelle
             _isResponse.update { _episodeCharList.value.isNotEmpty() }
         }
     }
