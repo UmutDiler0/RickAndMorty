@@ -8,4 +8,16 @@ data class LocationResponse(
     val residents: List<String>,
     val url: String,
     val created: String
-)
+){
+    companion object{
+        fun empty() = LocationResponse(
+            id = 0,
+            name = "",
+            type = "",
+            dimension = "",
+            residents = listOf(),
+            url = "",
+            created = ""
+        )
+    }
+}

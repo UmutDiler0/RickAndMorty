@@ -137,9 +137,10 @@ class MainActivity : ComponentActivity() {
                                 LaunchedEffect(Unit) { currentScreen.value = Routes.EPISODE.name }
                                 CurrentEpisode(navController,episodeId)
                             }
-                            composable(route = Routes.LOCATION.name) {
+                            composable(route = Routes.LOCATION.name + "/{locationId}") { backStackEntry ->
+                                val lodecationId = backStackEntry.arguments?.getString("locationId")?.toIntOrNull()
                                 LaunchedEffect(Unit) { currentScreen.value = Routes.LOCATION.name }
-                                CurrentLocation(navController)
+                                CurrentLocation(navController, locationId = lodecationId)
                             }
                         }
                     }

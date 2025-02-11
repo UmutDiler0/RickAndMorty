@@ -68,4 +68,10 @@ class MainRepo @Inject constructor(
         return rickAndMortyApi.getCharByEpisode(url)
     }
 
+    suspend fun getCharByLocation(url: String): CharacterResponse{
+        return rickAndMortyApi.getCharByLocation(url)
+    }
+
+    suspend fun getLocationById(id: Int): LocationResponse = rickAndMortyApi.getLocationById(id)
+
 }

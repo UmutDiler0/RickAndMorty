@@ -77,7 +77,7 @@ fun  ListsViewForLocations(
                         Row(
                             modifier = Modifier.fillMaxWidth()
                                 .clickable {
-                                    navController.navigate(route = route)
+                                    navController.navigate(route = route+"/${location.id}")
                                 },
                             verticalAlignment = Alignment.CenterVertically
                         ) {

@@ -47,5 +47,14 @@ interface RickAndMortyApi {
         @Url url: String
     ): CharacterResponse
 
+    @GET
+    suspend fun getCharByLocation(
+        @Url url: String
+    ): CharacterResponse
+
+    @GET("location/{id}")
+    suspend fun getLocationById(
+        @Path("id") id: Int
+    ): LocationResponse
 
 }
