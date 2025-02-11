@@ -226,7 +226,7 @@ fun EpisodeList(
         viewModel.getEpisodeInfo(it)
     }
     val episodeList by viewModel.episodeList.collectAsState()
-    episodeList.size
+
 
     Column {
         Text(
@@ -243,7 +243,7 @@ fun EpisodeList(
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
                         .clickable {
-                            navController.navigate(route = Routes.EPISODE.name)
+                            navController.navigate(route = Routes.EPISODE.name+"/${episode.id}")
                         },
                     verticalAlignment = Alignment.CenterVertically
                 ) {

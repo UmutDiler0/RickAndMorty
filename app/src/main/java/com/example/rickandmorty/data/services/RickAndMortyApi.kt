@@ -37,5 +37,15 @@ interface RickAndMortyApi {
         @Url url: String
     ): EpisodeResponse
 
+    @GET("episode/{id}")
+    suspend fun getEpisodeById (
+        @Path("id") id: Int
+    ): EpisodeResponse
+
+    @GET
+    suspend fun getCharByEpisode(
+        @Url url: String
+    ): CharacterResponse
+
 
 }

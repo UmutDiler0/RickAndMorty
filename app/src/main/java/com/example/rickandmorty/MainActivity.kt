@@ -132,9 +132,10 @@ class MainActivity : ComponentActivity() {
                                 LaunchedEffect(Unit) { currentScreen.value = Routes.DETAILS.name }
                                 DetailScreen(navController = navController, characterId = characterId)
                             }
-                            composable(route = Routes.EPISODE.name) {
+                            composable(route = Routes.EPISODE.name + "/{episodeId}") { backStackEntry ->
+                                val episodeId = backStackEntry.arguments?.getString("episodeId")?.toIntOrNull()
                                 LaunchedEffect(Unit) { currentScreen.value = Routes.EPISODE.name }
-                                CurrentEpisode(navController)
+                                CurrentEpisode(navController,episodeId)
                             }
                             composable(route = Routes.LOCATION.name) {
                                 LaunchedEffect(Unit) { currentScreen.value = Routes.LOCATION.name }

@@ -1,5 +1,6 @@
-package com.example.rickandmorty.ui.screens.details
+package com.example.rickandmorty.ui.screens.currentepisode
 
+import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rickandmorty.data.models.CharacterResponse
@@ -13,26 +14,27 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class DetailViewModel @Inject constructor(
+class CurrentEpisodeVM @Inject constructor(
     val mainRepo: MainRepo
 ): ViewModel() {
-    private var _characterInfo = MutableStateFlow<CharacterResponse>(CharacterResponse.empty())
-    val characterInfo: StateFlow<CharacterResponse> get() = _characterInfo
 
     private var _episodeInfo = MutableStateFlow<EpisodeResponse>(EpisodeResponse.empty())
     val episodeInfo: StateFlow<EpisodeResponse> get() = _episodeInfo
 
     private var _isResponse = MutableStateFlow<Boolean>(false)
-    val isResponse : StateFlow<Boolean> get() = _isResponse
+    val isResposnse: StateFlow<Boolean> get() = _isResponse
 
-    private var _episodeList = MutableStateFlow<MutableList<EpisodeResponse>>(mutableListOf())
-    val episodeList : StateFlow<MutableList<EpisodeResponse>> get() = _episodeList
+    private var _episodeCharacter = MutableStateFlow<CharacterResponse>(CharacterResponse.empty())
+    val episodeCharacter: StateFlow<CharacterResponse> get() = _episodeCharacter
 
-    fun getCharInfo(id: Int) {
+    private var _episodeCharList = MutableStateFlow<MutableList<CharacterResponse>>(mutableListOf())
+    val episodeCharList: StateFlow<MutableList<CharacterResponse>> get() = _episodeCharList
+
+    fun getCharByEpisode(url: String) {
         viewModelScope.launch {
-            val character = mainRepo.getCharacterById(id)
+            val character = mainRepo.getCharByEpisode(url)
 
-            _characterInfo.update {
+            _episodeCharacter.update {
                 it.copy(
                     id = character.id,
                     name = character.name,
@@ -49,31 +51,23 @@ class DetailViewModel @Inject constructor(
                 )
             }
 
-            _isResponse.value = _characterInfo.value != CharacterResponse.empty()
+            // Listeye karakteri ekle
+            _episodeCharList.update { currentList ->
+                currentList.toMutableList().apply { add(character) }
+            }
+
+            // Bütün karakterler yüklendikten sonra response güncelle
+            _isResponse.update { _episodeCharList.value.isNotEmpty() }
         }
     }
 
-    fun getEpisodeInfo(url: String) {
+
+    fun getCharacterById(id : Int){
         viewModelScope.launch {
-            val episode = mainRepo.getEpisodesByUrl(url)
-
             _episodeInfo.update {
-                it.copy(
-                    id = episode.id,
-                    name = episode.name,
-                    episode = episode.episode,
-                    url = episode.url,
-                    characters = episode.characters,
-                    air_date = episode.air_date,
-                    created = episode.created
-                )
+                mainRepo.getEpisodeById(id)
             }
 
-            _episodeList.update { currentList ->
-                val newList = currentList.toMutableList()
-                newList.add(episode)
-                newList
-            }
         }
     }
 
